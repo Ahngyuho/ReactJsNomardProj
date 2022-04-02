@@ -1,0 +1,38 @@
+리액트를 사용하는 이유에 대해 일단 알아보자
+어떤 문제를 해결하려고 등장
+ui를 interactivity(상호작용)하도록 웹사이트와 도와줌
+이걸 위해 등장 
+
+js로 웹으로 뭔가를 만드려고 함
+버튼을 만들고 그 버튼을 클릭한 수를 세고 싶으면
+js로는 많은 일들을 해야함 
+리액트가 이러한 일들을 대신 해준다
+
+2.1
+버튼 클릭 수를 세는 프로그램
+
+<body>
+    <button id = "btn">Click me</button>
+</body>
+
+이렇게 button을 만들고
+
+<script>
+    const button = document.querySelector("btn");
+</script>
+이런식으로 바로 js코드를 넣어줄 수 있음
+
+<script>
+    let counter = 0;
+    const button = document.getElementById("btn");
+    const span = document.querySelector("span");
+    function handleClick(){
+        counter = counter + 1;
+        span.innerText = `Total click ${counter}`;
+    }
+    button.addEventListener("click",handleClick);
+</script>
+
+이런 식의 코드를 계속 작성해야함
+
+하지만 더 나은 방법이 존재함
