@@ -300,3 +300,189 @@ const onClick = () =>{
 정리
 데이터가 바뀔때마다 해당 컴포넌트를 리렌더링
 바뀌는 컴포넌트만 바뀜 reactjs의 장점
+
+3.4
+state 즉 counter를  바꾸는 방법이 2가지 있음
+하나는 앞서 배운 방법이고
+
+이전값을 기준으로 값을 바꾸고 싶다면
+이 state의 두번째 매개변수인 함수에는
+const onClick = () =>{
+            //setCounter(counter+1);
+            setCounter(current => current + 1);
+        }
+매개변수에 숫자도 들어갈 수 있으나
+함수도 들어갈 수 있다.
+이 함수의 첫번째 매개변수는 현재의 값이다
+이 함수의 return 값이 새로운 state가 되는 것
+이게 더 안전함
+이렇게 함수를 이용해서 매개변수를 주면 
+리액트가 확실히 이 값이(current) 현재 값이라는 걸 보장함
+더 정확히 계산 가능
+이제 state를 기반으로 계산하고 싶으면 이렇게 함수를 이용하자
+
+정리
+state 값을 설정하는 방법
+setCounter(counter + 1) 직접 값 설정
+setCounter((current) => current + 1)
+함수 전달하기 이 current함수가 현재 state값을 얻도록 해줌
+
+3.5
+단위 변환 앱 만들어보기
+
+html에서 label을 사용하면 input과 연결가능
+input은 id를 가져야하고 label은 for 속성을 이용해
+input과 연결
+<label for ="minutes">Minutes</label>
+<input id="minutes" placeholder="Minutes" type="number"/>
+이 label을 선택하면 해당 input에 입력가능하도록 커서가 생김
+
+사실 for를 쓰면 안됨 jsx에서는
+for는 js 용어임 이미 js에서 사용하고 있는 문법언어?
+class도  넣어보면 에러 생김
+jsx를 쓰고있을 때는 이런점을 주의해야함
+class for을 쓰면 안됨
+class => className for=>htmlFor
+
+아직 이 input의 value를 reactjs로 얻어내는 방법을 배우지 않음
+ReactJs에서는 input의 value가 uncontrolled라고 알려짐
+
+onChange는 input의 변화를 감지함
+이 eventListener의 event 매개변수안에
+이 input의 value를 추적할 수 있음
+event.target.value
+이게 reactjs에서 form을 다루는 방법임
+
+
+3.6
+정리
+React.useState()
+default = 0
+
+const onChange = (event)=>{
+            setMinutes(event.target.value);
+            input값이 바뀌고 그 값을 value안에 넣는것
+            즉 input스스로 값이 변경되는 것
+        }
+        return(
+            <>
+                <h1>super Converter</h1>
+                <label for ="minutes">Minutes</label>
+                <input value={minutes}
+                이렇게 value와 값을 연결시켜준이유는 
+                input을 외부와 연결하기 위함
+                 id="minutes" 
+                 placeholder="Minutes" 
+                 type="number"
+                 onChange={onChange} input가 바뀌면 발생
+                 />
+
+<label for="hours">Hours</label>
+<input value={minutes/60} id='hours' placeholder="Hours" type="number" />
+
+이렇게 해주면 된다 이건 리렌더링 되는게 아님
+
+<div>
+    <button onClick={reset}>Reset</button>
+</div>
+const reset = () =>{
+            setMinutes(0);
+        }
+이렇게 하면 리렌더링 되는 것임
+
+3.7
+flip버튼
+
+const [flipped,setFlipped] = React.useState();
+새로운 state생성
+<button onClick={onFlip}>Flipped</button>
+플립버튼 생성
+const onFlip = () => setFlipped(!flipped);
+
+하지만 이건 함수를 사용하지 않고 직접 값을 변경하는 것임
+함수를 넣어서 해줘야 정확함
+
+const onFlip = () => setFlipped(current => !current);
+
+<label for="hours">Hours</label>
+                    <input value={Math.round(minutes/60)} 
+                    id='hours' placeholder="Hours" 
+                    type="number" 
+                    disabled={flipped === false}/>
+hour에 disabled = {flipped === false}추가해주자
+disabled={flipped === true}
+minutes에는 이거 추가 그러면 번갈아 적용됨
+
+flip
+const onFlip = () => setFlipped(!flipped);
+-> flipped가 true라면 부정명제인 !flipped는 false
+-> false라면 true
+
+state값으로 input을 enabled할지 disabled 할지를 결정할 수 있음
+
+디폴트 값이 false 라고 정했으므로 Hours는 disabled 되어야함
+그래서 disabled={flipped === false}를 써줘서
+flipped가 false라면, disabled는 true가 되도록 만들어줌
+Minuets에는 반대로
+disabled={flipped === true}라고 써줌
+그러나
+Hours는
+disabled={!flipped}
+Minuets에는 반대로
+disabled={flipped}
+주는게 더 짧고 좋음
+
+시간 -> 분 컨버터
+삼항연산자(ternary operator) 사용하기
+flipped ? amount : amount / 60
+-> 만약 flipped 상태면 state에 있는 값을 그대로 보여주기
+아니라면 60으로 나눈 변환된 값 보여주기
+value={flipped ? amount * 60 : amount}
+-> 만약 flipped 상태면 60으로 곱한 변환된 값 보여주기
+아니라면 state에 있는 값을 그대로 보여주기
+
+flip누르면 변화된 값 그대로 가져오므로
+onFlip 변수에 reset(); 넣어주기
+
+3.8
+정리
+const [amount,setAmount] = React.useState();
+const [flipped,setFlipped] = React.useState();
+state 두개 추가
+filp는 시 => 분 분 => 시
+바꾸기 위함
+
+onChange={onChange}
+input의 값이 바뀌면 실행되는 eventListener이다
+
+const onChange = (event)=>{
+            setAmount(event.target.value);
+        }
+input에 입력된 값을 추적해서 그 값을 amount에 넣는 것
+
+state를 통해 UI를 변경한 것임
+
+3.9
+코드 챌린지
+
+function MinutesToHours(){...}
+    const root = document.getElementById("root");
+    
+    function App(){
+        return(
+            <div>
+                <h1>Super Converter</h1>
+                <MinutesToHours/>
+            </div>
+        );
+    }
+        
+
+    ReactDOM.render(<App />,root);
+
+이런식으로 컴포넌트안에 컴포넌트를 넣자
+다른 컴포넌트도 만들어보자
+{안에 js코드를 넣을 수 있다.}
+아 state를 변화시키면 모든게 새로고침됨
+그러면서 reactjs가 re-render에 필요한 것들을
+re-render해줌
