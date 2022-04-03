@@ -1,18 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <body>
-    <span id = "sp"></span>
-    <button id = "btn">Click me</button>
+    <div id ="root"></div>
 </body>
-<script>
+<script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+    // const h3 = React.createElement("h3",{
+    //     id : "title",
+    //     onMouseEnter: () => console.log("mouse enter"),
+    // },"Hello I'm a h3");
+    // const root = document.getElementById("root");
+    // const btn = React.createElement("button",{
+    //     onClick: ()  => console.log("im clicked"),
+    //     style : {
+    //         backgroundColor: "tomato",
+    //     }
+    // },"Click me");
+    // const container = React.createElement("div",null,[h3,btn]);
+    // ReactDOM.render(container,root);
+    //이 위 내용은 오래된 방식
+
+    const root = document.getElementById("root");
     let counter = 0;
-    const button = document.getElementById("btn");
-    const span = document.querySelector("span");
-    function handleClick(){
-        counter = counter + 1;
-        span.innerText = `Total click ${counter}`;
+    
+    function App(){
+        //const data = React.useState(0);
+        //이걸 통해 data와 함수를 얻을 수 있음
+        //함수는 data를  바꿀 때 사용하는 함수임
+        //이게 function countUp() 과 let counter = 0;
+        //을 대체하는 것임
+        const [counter,setCounter] = React.useState(0);
+        const onClick = () =>{
+            setCounter(counter+1);
+        }
+        return(
+            <div>
+            <h3>Total click :{counter}</h3>
+            <button onClick = {onClick}>Click me</button>    
+        </div>
+        );
     }
-    button.addEventListener("click",handleClick);
+        
+
+    ReactDOM.render(<App />,root);
+
 </script>
 </html>

@@ -36,3 +36,267 @@ js로는 많은 일들을 해야함
 이런 식의 코드를 계속 작성해야함
 
 하지만 더 나은 방법이 존재함
+
+react를 사용하자 그전에 설치해야함
+js 코드 import
+
+<script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+이거 import해줌
+
+이제 js로 이 애플리케이션을 만들어  볼 것임
+
+2.2
+React js element를 어떻게 생성하는지 보자
+React js 의 규칙 중 하나는 html을 해당 페이지에
+직접 작성하지 않음
+span button 이런걸 js 코드로 대체할 것임 html코드를 
+직접 작성하지 않고 react js를 통해 element를 만들어 낼 것임
+매우 유용
+
+일단 어려운 방식부터 해보자
+
+
+<script>
+    const span = React.createElement("span");
+    이렇게 생성하고자 하는 element를 적어주는것
+</script>
+
+아직 body에 span이 생기진 않았지만 우선 span은 생성됨
+React js가 html을 대신 작성해 줄 것임
+
+React JS - 어플리케이션이 아주 인터랙티브하도록 만들어주는 library. 엔진과 같다.
+React-dom - library 또는 package. 모든 react element들을 HTML body에 둘 수 있도록 해줌.
+ReactDOM.render() - render의 의미는 react element를 가지고 HTML로 만들어 배치한다는 것. 즉, 사용자에게 보여준다는 의미
+ReactDOM.render(span, span이 가야할 위치)
+-> 그래서 보통 body에 id=“root” 만들어서 span을 root 안에 두라고 함
+
+<div id = "roor"></div>
+const root = document.getElementById("root");
+ReactDOM.render(span,where : root) React element를 가지고 html로 만들어 배치함
+
+const span = React.createElement("span",{property})
+이 createElement의 두번째 매개변수로 해당 element의 property를 줄 수 있다.
+const span = React.createElement("span",{id:"sexy-span"});
+
+<div id="root"><span id="sexy-span"></span></div>
+이렇게 들어가게 된다
+
+ReactJs는 js를 이용해 element들을 생성하고 
+그걸 ReactJs가 html로 번역하는 것임
+
+2.3
+두 가지 const를 render 하고 싶은 경우 div를 만든다
+그리고 React.createElement("div", null, [span, btn]); 와 같이 배열을 만들어서 const를 넣어준다.
+
+property에 eventListener 넣는 것도 가능.
+클릭 - {onClick: () => console.log("I'm clicked")}
+마우스엔터 - {onMouseEnter: () => console.log("mouse enter")}
+
+addEventListener 를 하지 않아도 property에 추가해서
+사용할 수 있음
+
+const h3 = React.createElement("h3",{
+        id : "title",
+        onMouseEnter: () => console.log("mouse enter"),
+    },"Hello I'm a h3");
+
+이렇게 여러개의 property를 설정가능하다는 것
+on + event 는 eventListener 임을 ReactJs가 알고있음
+
+const btn = React.createElement("button",{
+        onClick: ()  => console.log("im clicked"),
+        style : {
+            backgroundColor: "tomato",
+        }
+    },"Click me");
+style도 넣을 수 있다. 3번째는 content 매개변수
+
+2.4
+정리
+1.ReactJs ReactDOM
+ReactJs는 element들을 생성하고 eventListener를 
+더해주는 것을 도와줌
+ReactJs는 interactivity의 원동력임
+ReactDOM은 element들을 HTML로 바꿔줌
+
+ReactDOM.render(element,element)
+첫번째 element들을 두번째 element에 보여줘라
+
+근데 이제 이 방식으로 쓰진 않을 것
+
+element에는 eventListener를 달아야 함
+ReactJs는 addEventListener 할 필요 없고 createElement의
+두번쨰 매개변수가 property를 받으므로 여기에 on+event를 통해
+해당 element에 addEventListener 를 해주는 것이다.
+이 두번째 매개변수에는 style,id,eventListener등등 올 수 있다.
+하지만 더 쉬운 React element 생성법이 있다.
+ const container = React.createElement("div",null,[h3,btn]);
+
+ 이렇게 세번째에 array형태로 줘서 해당 element에 여러 element들을
+ render 할 수 있음
+
+2.5
+JSX
+
+좀 더 편리하게 element를 만들자
+jsx는 js를 좀 더 확장한 것
+jsx로 React요소를 만듦
+
+바벨이라는 것을 이용해서 jsx로 만든 코드를
+브라우저가 이해하는 형태로 바꿔주는 것
+이걸 추가해야 함
+https://unpkg.com/@babel/standalone/babel.min.js
+const Title = (
+            <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
+            Hello I'm a title
+        </h3>
+이런식으로 property를 HTML 태그의 속성처럼 적어주면 된다.
+
+2.6
+const container = React.createElement("div",null,[Title,Button]);
+이제 이 표현을 jsx형태로 바꿔보자
+
+const Container = <div> Title Button
+        </div>;
+    ReactDOM.render(container,root);
+
+하지만 이렇게만 해서는 안됨 함수를 만들어서 넣어줘야함
+
+이건 function Button(){ return ... } 과 동일함
+항상 jsx를 return 해줘야 함 이게 jsx를 return해주는
+함수가 되는 것임
+이걸 arraw function 이라고 함
+const Button =() => (
+        <button style={{
+            backgroundColor: "tomato",
+        }
+        }
+        onClick = {() => console.log("im clicked")}>
+            Click me
+        </button>
+    );
+
+const Container = <div> <Title /><Button />
+        </div>;
+이런식으로 해주면 된다. Title 함수가 마치 HTML 태그인 것처럼
+이 컴포넌트의 첫글자는 항상 대문자여야 함 그래서 Title
+Button 이렇게 첫글자를 대문자로 써준이유
+이런 컴포넌트 요소 즉 Title = h3 Button = button
+이렇게 직접 만들어 줄 때는 항상 const 첫글자 대문자
+이런식으로 만들어 줘야함
+const Container = () => <div> <Title /><Button />
+        </div>;
+    ReactDOM.render(<Container/>,root);
+
+이렇게 함수로 만들어서 넣어주기 가능
+
+3.0
+React.js의 state에 대해 배워보자
+state는 기본적으로 데이터가 저장되는 곳
+React element를 함수 내에 담으면 원하는 만큼 사용 가능
+<Title/>
+코드 재사용
+
+const Container = () =>(
+        <div>
+            <h3>Total click : 0 </h3>
+            <button>Click me</button>    
+        </div>
+    );
+이렇게도 만들 수 있음
+
+var Container = function Container() {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", null, "Total click : 0 "), /*#__PURE__*/React.createElement("button", null, "Click me"));
+};
+
+바벨에 의해 jsx가 이런식으로 번역되는 것임
+
+const Container = () =>(
+        <div>
+            <h3>Total click : {counter} </h3>
+            jsx에서는 이런식으로 변수값을 띄워줄 수 있음
+            <button onClick={countUp}>Click me</button>    
+        </div>
+    );
+
+jsx에서는 html 태그 옆에 property를 추가가능했다
+<button onClick={countUp}
+function countUp(){
+        counter += counter + 1;
+    }
+
+하지만 counter가 올라가기는 하는데 html상에서는 숫자가 올라가지 않음
+그 이유는 처음에 함수는 호출해야 실행되므로 먼저 실행되지 않고
+ReactDOM.render() 이 함수가 호출됨 그러면서 Container가 실행되는데
+이게 처음 실행될 때 counter은 0임 React가 element로 렌더링하고 root에 담아주는데
+그때 렌더링 된 counter는 0임
+그리고 button을 누를 때 마다 counter은 올라가는데
+올라가고 나서 렌더링을 해주지 않고 있음 ReactDOM은 마지막에
+딱 한번 실행되고 더 이상 실행되지 않음 이게 html로 렌더링
+해줘야 하는데 그렇지 않고 있음
+
+function countUp(){
+        counter += counter + 1;
+        ReactDOM.render(<Container />,root);
+    }
+이렇게 클릭 될 때 실행되는 함수에 이렇게 넣어주면 된다.
+
+function render(){
+        ReactDOM.render(<Container />,root);
+    }
+중복돼서 사용되니 함수로 만들어 사용하자
+
+하지만 더 쉬운 방법이 있음
+
+근데 보면 오직 바뀐 부분만 업데이트 되고 있음
+
+브라우저에서 확인해보면 counter만 계속 바뀌고 있고
+나머지 h3 이런건 바뀌지 않음 
+ReactDOM.render(Contatiner)
+Container안에 모든 요소들이 동일해도 계속 바뀔 줄 알았으나
+react가 바뀐 부분만 업데이트 해줌
+엄청난 장점 여러가지 요소들을 리렌더링 해주려고 해도
+전부다 새로 생성되지는 않는 것임 오로지 바뀐부분만 리렌더링
+
+3.1
+리렌더링을 하는 더 좋은 방법이 있음
+
+const App(){
+        const data = React.useState();
+        //이걸 통해 data와 함수를 얻을 수 있음
+        //함수는 data를  바꿀 때 사용하는 함수임
+        //이게 function countUp() 과 let counter = 0;
+        //을 대체하는 것임
+        console.log(data);
+        return(
+            <div>
+            <h3>Total click :0</h3>
+            <button>Click me</button>    
+        </div>
+        );
+    }
+const [counter,modifier] = React.useState(0);
+이렇게 const counter = useState[0] 
+이런식으로 js가 제공하는 문법이 존재함
+const counter = data[0]
+const modifier = data[1] 
+이런식으로 짜지 않아도 됨
+
+3.2
+React.useState(data);
+이건 배열을 반환해줌
+하나는 data와 data 값을 변경하는 함수
+modifier임
+왜 modifier가 필요할까?
+
+이 modifier에 매개변수로 값을 넣어주면
+data값이 그 값으로 바뀌면서 리렌더링됨
+const onClick = () =>{
+            modifier(counter+1);
+        }
+
+3.3
+정리
+데이터가 바뀔때마다 해당 컴포넌트를 리렌더링
+바뀌는 컴포넌트만 바뀜 reactjs의 장점
