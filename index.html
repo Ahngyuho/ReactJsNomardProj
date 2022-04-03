@@ -7,6 +7,7 @@
 <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
 <script type="text/babel">
     // const h3 = React.createElement("h3",{
     //     id : "title",
@@ -71,12 +72,12 @@
     }
     const root = document.getElementById("root");
 
-    function KmToMiles(){
+    function KmToMiles() {
 
     }
 
 
-    function App() {
+    function App1() {
         const [index, setIndex] = React.useState("0");
         const onSelect = (event) => {
             setIndex(event.target.value);
@@ -89,11 +90,40 @@
                     <option value="1">Km & Miles</option>
                 </select>
                 <hr />
-                {index === "0" ? <MinutesToHours/> : null}
+                {index === "0" ? <MinutesToHours /> : null}
             </div>
         );
     }
 
+    //ReactDOM.render(<App1 />, root);
+    //컴포넌트는 단지 jsx를 반환하는 함수임
+    function Btn({ text, fontSize = 14 }) {
+
+        return <button
+            style={{
+                backgroundColor: "tomato",
+                color: "white",
+                padding: "10px 20px",
+                border: 0,
+                borderRadius: 10,
+                fontSize : fontSize,
+            }}>{text}</button>;
+    }
+
+    Btn.propTypes = {
+        text: PropTypes.string.isRequired,
+        fontSize : PropTypes.number.isRequired,
+    }
+    //그리고 <SaveBtn/>이런식으로 함수를 호출하는 것
+    //이게 함수형 컴포넌트임
+    function App() {
+        const [value, setValue] = React.useState("Save Changes");
+        const changeValue = () => setValue("Revert Changes");
+        return <div>
+            <Btn text={value} fontSize={16} />
+            <Btn text={"Continue"} fontSize={16}/>
+        </div>
+    }
 
     ReactDOM.render(<App />, root);
 
